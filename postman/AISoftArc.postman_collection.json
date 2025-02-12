@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "6593897f-aab8-4cf9-adc5-00546fe1d3f0",
+		"name": "AISoftArc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10453911"
+	},
+	"item": [
+		{
+			"name": "Generate Architecture",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"prompt\": \"\",\n    \"project_type\": \"\",\n    \"response\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1/generate_architecture",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"generate_architecture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Code",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"architecture_id\": \"\",\n    \"component_name\": \"\",\n    \"programming_language\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1/generate_code",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"generate_code"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deploy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code_id\": \"\",\n    \"azure_resource_group\": \"\",\n    \"environment\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1/deploy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"deploy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
