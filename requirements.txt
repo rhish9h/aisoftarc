@@ -1,9 +1,10 @@
-fastapi>=0.68.0,<0.69.0
+fastapi>=0.110.0 # Upgrade FastAPI to support Pydantic v2
 uvicorn>=0.15.0,<0.16.0
-python-dotenv>=0.19.0,<0.20.0
-pydantic>=1.8.0,<2.0.0
+pydantic>=2.0.0,<3.0.0 # Allow Pydantic v2
+pydantic-settings>=2.0.0,<3.0.0
 black>=21.7b0
 flake8>=3.9.0
 pytest>=6.2.5
 httpx>=0.18.2  # For async HTTP requests
 python-multipart>=0.0.5  # For form data processing
+openai>=1.0.0  # Use the latest OpenAI library
