@@ -66,13 +66,23 @@ aisoftarc/
 │   ├── main.py              # FastAPI application entry point
 │   ├── api/                 # API routes and endpoints
 │   ├── core/                # Core configuration
-│   ├── models/              # Pydantic models
+│   ├── schemas/             # Pydantic schemas (request/response models)
 │   ├── services/            # Business logic
 │   └── utils/               # Utility functions
 ├── docs/                    # Documentation
 ├── tests/                   # Test suite
-└── requirements.txt         # Project dependencies
+├── .env.example             # Example environment variables file
+├── requirements.txt         # Project dependencies
+└── README.md                # This file
 ```
+
+## Technical Details
+
+- **Framework**: FastAPI (Asynchronous)
+- **AI Integration**: OpenAI API (using `openai` async client)
+- **Data Validation**: Pydantic
+- **Diagram Format**: Mermaid
+- **Architecture**: Follows Clean Architecture principles with distinct layers (API, Services, Core).
 
 ## Future Improvements
 
