@@ -31,7 +31,8 @@ async def generate_architecture(
     """
     try:
         logger.info(f"Received architecture generation request: {request.dict()}")
-        architecture = service.generate(
+        # Add await here as service.generate is now async
+        architecture = await service.generate(
             prompt=request.prompt,
             project_type=request.project_type,
             constraints=request.constraints,

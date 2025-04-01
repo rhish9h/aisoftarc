@@ -7,7 +7,7 @@ from app.core.config import settings
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="AI Software Architecture Generator API"
+    description="AI Software Architect"
 )
 
 # Configure CORS
@@ -26,4 +26,4 @@ app.include_router(deploy.router, prefix="/api/v1", tags=["deploy"])
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to AI Software Architecture Generator API"}
+    return {"message": "Welcome to AI Software Architect"}
