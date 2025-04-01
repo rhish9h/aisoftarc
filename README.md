@@ -4,10 +4,11 @@ A FastAPI-based system for generating software architecture designs, code, and d
 
 ## Features
 
-- Generate software architecture diagrams from natural language prompts
-- Convert architecture designs into code
-- Automated deployment to Azure
-- RESTful API with OpenAPI documentation
+- Generate software architecture diagrams from natural language prompts (Backend)
+- Convert architecture designs into code (Backend - Planned)
+- Automated deployment to Azure (Backend - Planned)
+- RESTful API with OpenAPI documentation (Backend)
+- **React Frontend** for interacting with the API (Frontend)
 
 ## Getting Started
 
@@ -52,6 +53,12 @@ uvicorn app.main:app --reload
 The API will be available at `http://localhost:8000`
 API documentation will be at `http://localhost:8000/docs`
 
+### Frontend (React)
+
+Please see the dedicated README in the `frontend` directory for instructions on how to set up and run the frontend application:
+
+[Frontend README](./frontend/README.md)
+
 ## API Endpoints
 
 - `POST /api/v1/generate_architecture`: Generate software architecture from requirements
@@ -62,18 +69,24 @@ API documentation will be at `http://localhost:8000/docs`
 
 ```
 aisoftarc/
-├── app/
+├── app/                     # FastAPI backend application
 │   ├── main.py              # FastAPI application entry point
 │   ├── api/                 # API routes and endpoints
 │   ├── core/                # Core configuration
 │   ├── schemas/             # Pydantic schemas (request/response models)
 │   ├── services/            # Business logic
 │   └── utils/               # Utility functions
+├── frontend/                # React frontend application
+│   ├── public/
+│   ├── src/
+│   ├── package.json
+│   └── ... (see frontend/README.md)
 ├── docs/                    # Documentation
 ├── tests/                   # Test suite
-├── .env.example             # Example environment variables file
-├── requirements.txt         # Project dependencies
-└── README.md                # This file
+├── .env.example             # Example BACKEND environment variables file
+├── requirements.txt         # Project BACKEND dependencies
+├── .gitignore               # Top-level Git ignore rules
+└── README.md                # This file (Project Overview)
 ```
 
 ## Technical Details
@@ -83,6 +96,7 @@ aisoftarc/
 - **Data Validation**: Pydantic
 - **Diagram Format**: Mermaid
 - **Architecture**: Follows Clean Architecture principles with distinct layers (API, Services, Core).
+- **Frontend**: React, Vite
 
 ## Future Improvements
 
