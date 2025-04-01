@@ -24,10 +24,22 @@ logger = logging.getLogger(__name__)
 
 # --- Service Class ---
 class ArchitectureService:
-    """Service class responsible for generating software architecture using OpenAI (Async)."""
+    """Asynchronous service class for generating software architecture using OpenAI.
+
+    This service encapsulates the logic for:
+    1. Building the appropriate prompt for the OpenAI API.
+    2. Calling the OpenAI API asynchronously.
+    3. Parsing and validating the JSON response containing the architecture details.
+    4. Handling potential errors during the process using custom exceptions.
+    """
 
     def __init__(self):
-        """Initializes the ArchitectureService, including the AsyncOpenAI client."""
+        """Initializes the ArchitectureService, setting up the AsyncOpenAI client.
+
+        Raises:
+            ServiceError: If the AsyncOpenAI client cannot be initialized,
+                          typically due to missing API key or configuration issues.
+        """
         try:
             # Initialize AsyncOpenAI client
             self.client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY) 
@@ -43,7 +55,16 @@ class ArchitectureService:
 
     # This method doesn't perform I/O, can remain synchronous
     def _build_openai_prompt(self, prompt: str, project_type: str, constraints: list[str]) -> list[dict]:
-        """Builds the list of messages for the OpenAI API call."""
+        """Builds the list of messages for the OpenAI API call, requesting Mermaid syntax.
+
+        Args:
+            prompt: The user's core requirement for the architecture.
+            project_type: The type of project (e.g., Web Application).
+            constraints: Specific constraints for the architecture.
+
+        Returns:
+            A list of dictionaries representing the system and user messages for the API.
+        """
         # (Implementation remains the same)
         system_message = (
             f"You are an AI assistant specializing in software architecture. "
@@ -64,7 +85,19 @@ class ArchitectureService:
 
     # Make this method asynchronous as it performs network I/O
     async def _call_openai_api(self, messages: list[dict]) -> str:
-        """Calls the OpenAI API asynchronously and returns the response content or raises OpenAIServiceError."""
+        """Calls the OpenAI Chat Completions API asynchronously using the configured client.
+
+        Args:
+            messages: The list of prompt messages (system and user roles).
+
+        Returns:
+            The raw JSON string content received from the OpenAI API.
+
+        Raises:
+            OpenAIServiceError: If the client is not initialized, if the API returns an error
+                              (e.g., APIError, RateLimitError), if the response is empty,
+                              or if any other unexpected communication error occurs.
+        """
         if not self.client:
             logger.error("AsyncOpenAI client is not initialized.")
             raise OpenAIServiceError("AsyncOpenAI client is not initialized.")

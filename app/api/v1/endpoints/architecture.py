@@ -26,8 +26,29 @@ async def generate_architecture(
     service: ArchitectureService = Depends(ArchitectureService)
 ):
     """
-    Generate software architecture based on user input.
-    Handles potential errors during generation and returns appropriate HTTP exceptions.
+    Asynchronously generates software architecture based on user input using the ArchitectureService.
+
+    This endpoint takes user requirements, project type, and constraints, uses the
+    `ArchitectureService` (injected) to communicate with an AI model, and returns the
+    generated architecture details, including a Mermaid diagram.
+
+    It handles potential errors from the service layer (like API communication issues,
+    response parsing errors, or configuration problems) and maps them to appropriate
+    HTTP status codes and error messages.
+
+    Args:
+        request: The request body containing prompt, project_type, and constraints.
+        service: The injected asynchronous ArchitectureService instance.
+
+    Returns:
+        An ArchitectureResponse containing the generated architecture diagram (Mermaid),
+        description, and recommendations.
+
+    Raises:
+        HTTPException 503: If the AI service (OpenAI) is unavailable or errors out.
+        HTTPException 500: If the AI response cannot be parsed or validated.
+        HTTPException 500: If there's an unexpected error during generation.
+        HTTPException 500: If the ArchitectureService fails to initialize (e.g., config error).
     """
     try:
         logger.info(f"Received architecture generation request: {request.dict()}")

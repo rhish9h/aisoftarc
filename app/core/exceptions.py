@@ -7,30 +7,47 @@ class AISoftArcError(Exception):
 
 # --- Service Layer Exceptions ---
 class ServiceError(AISoftArcError):
-    """Base exception for errors originating from the service layer."""
-    pass
+    """Base exception for service layer errors (e.g., initialization, configuration)."""
+    def __init__(self, message: str):
+        self.message = message
+        super().__init__(self.message)
 
 class ArchitectureGenerationError(ServiceError):
-    """Base exception for errors during architecture generation."""
+    """Exception raised for errors during the architecture generation orchestration.
+
+    This typically wraps unexpected errors occurring within the main `generate` method
+    of the ArchitectureService.
+    """
     pass
 
 class CodeGenerationError(ServiceError):
-    """Base exception for errors during code generation."""
+    """Exception raised specifically for errors during code generation.
+
+    (Currently defined but may not be used by ArchitectureService).
+    """
     pass
 
 class DeploymentError(ServiceError):
-    """Base exception for errors during deployment."""
+    """Exception raised specifically for errors during deployment operations.
+
+    (Currently defined but may not be used by ArchitectureService).
+    """
     pass
 
 # --- Specific Service Errors ---
 class OpenAIServiceError(ArchitectureGenerationError):
-    """Exception raised for errors related to the OpenAI API call (architecture)."""
-    # Could potentially be generalized if other services use OpenAI
+    """Exception raised for errors related to communication with the OpenAI API.
+
+    This includes API errors, rate limits, network issues, or empty responses.
+    """
     pass
 
 class ParsingError(ArchitectureGenerationError):
-    """Exception raised for errors during response parsing or validation (architecture)."""
-    # Could potentially be generalized
+    """Exception raised when parsing or validating the response from the AI service fails.
+
+    This can be due to invalid JSON format or the response data not matching the
+    expected Pydantic schema (ArchitectureResponse).
+    """
     pass
 
 # Add specific exceptions for code generation and deployment services as needed
