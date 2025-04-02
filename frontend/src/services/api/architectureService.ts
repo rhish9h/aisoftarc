@@ -28,7 +28,7 @@ export const architectureService = {
       // Transform response to match frontend expectations if needed
       const result: ArchitectureResponse = {
         id: `arch-${Date.now()}`, // Generate ID if not provided by backend
-        architecture_diagram: response.data.architecture_diagram,
+        architecture_diagram: sanitizeMermaidDiagram(response.data.architecture_diagram),
         description: response.data.description,
         recommendations: response.data.recommendations,
         // Parse components from description if not provided by backend
@@ -125,4 +125,30 @@ function createImplementationStepsFromRecommendations(recommendations: string[])
     title: `Step ${index + 1}`,
     description: recommendation
   }));
+}
+
+/**
+ * Helper function to sanitize and validate Mermaid diagram syntax
+ */
+function sanitizeMermaidDiagram(diagram: string): string {
+  if (!diagram) return '';
+  
+  // Remove any markdown code block markers if present
+  let sanitized = diagram.replace(/```mermaid\s*/g, '').replace(/```\s*$/g, '');
+  
+  // Ensure diagram starts with a valid Mermaid diagram type
+  const validDiagramTypes = ['graph', 'flowchart', 'sequenceDiagram', 'classDiagram', 'stateDiagram', 'erDiagram', 'gantt', 'pie'];
+  const startsWithValidType = validDiagramTypes.some(type => 
+    sanitized.trim().startsWith(type) || sanitized.trim().startsWith(`${type} `)
+  );
+  
+  // If no valid diagram type is found, default to flowchart
+  if (!startsWithValidType) {
+    sanitized = `flowchart TD\n${sanitized}`;
+  }
+  
+  // Log the sanitized diagram for debugging
+  console.log('Sanitized Mermaid diagram:', sanitized);
+  
+  return sanitized;
 }
