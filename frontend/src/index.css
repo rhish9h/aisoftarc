@@ -1,7 +1,7 @@
-/* Tailwind CSS directives */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Use PostCSS directives for Tailwind CSS */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 /* Keep any custom styles below this line */
 :root {
