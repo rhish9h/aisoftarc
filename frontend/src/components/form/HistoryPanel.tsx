@@ -4,9 +4,10 @@ import { ArchitectureHistory } from '../../types/architecture';
 import { formatDistanceToNow } from 'date-fns';
 
 interface HistoryPanelProps {
-  items: ArchitectureHistory[];
-  onSelectItem: (id: string) => void;
-  onClearHistory: () => void;
+  history: ArchitectureHistory[];
+  onSelect: (id: string) => void;
+  onClear: () => void;
+  disabled?: boolean;
 }
 
 /**
@@ -21,11 +22,12 @@ function formatRelativeTime(timestamp: string): string {
 }
 
 export const HistoryPanel: React.FC<HistoryPanelProps> = ({
-  items,
-  onSelectItem,
-  onClearHistory
+  history,
+  onSelect,
+  onClear,
+  disabled = false
 }) => {
-  if (items.length === 0) {
+  if (history.length === 0) {
     return (
       <div className="mt-8 pt-6 border-t border-secondary-100">
         <Text size="sm" fw={600} className="text-secondary-800 mb-4">Iteration History</Text>
@@ -44,22 +46,23 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
           variant="subtle" 
           size="xs" 
           color="blue" 
-          onClick={onClearHistory}
+          onClick={onClear}
+          disabled={disabled}
           className="text-primary-600 hover:text-primary-700"
         >
           Clear All
         </Button>
       </div>
       <div className="bg-secondary-50 rounded-lg divide-y divide-secondary-200 text-sm">
-        {items.map((item) => (
+        {history.map((item) => (
           <div 
             key={item.id}
-            className="p-3 hover:bg-secondary-100 cursor-pointer transition-colors flex justify-between items-center"
-            onClick={() => onSelectItem(item.id)}
+            className={`p-3 hover:bg-secondary-100 cursor-pointer transition-colors flex justify-between items-center ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
+            onClick={() => !disabled && onSelect(item.id)}
           >
             <div>
               <div className="font-medium text-secondary-800">
-                {item.projectType.charAt(0).toUpperCase() + item.projectType.slice(1)} - {item.description}
+                {item.project_type.charAt(0).toUpperCase() + item.project_type.slice(1)} - {item.description}
               </div>
               <div className="text-xs text-secondary-500">
                 {formatRelativeTime(item.timestamp)}

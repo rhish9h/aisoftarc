@@ -8,7 +8,9 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
  */
 export const createApiClient = (baseConfig: AxiosRequestConfig = {}): AxiosInstance => {
   // Get API URL from environment variables or use default
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+  // The API base URL should point to the FastAPI server root, not including /api/v1
+  // as the endpoints already include their full paths
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
   
   // Default configuration
   const defaultConfig: AxiosRequestConfig = {
@@ -37,6 +39,12 @@ export const createApiClient = (baseConfig: AxiosRequestConfig = {}): AxiosInsta
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      
+      // Log API requests in development
+      if (import.meta.env.DEV) {
+        console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`, config.data);
+      }
+      
       return config;
     },
     (error) => Promise.reject(error)
@@ -44,9 +52,20 @@ export const createApiClient = (baseConfig: AxiosRequestConfig = {}): AxiosInsta
   
   // Response interceptor for global error handling
   client.interceptors.response.use(
-    (response) => response,
+    (response) => {
+      // Log API responses in development
+      if (import.meta.env.DEV) {
+        console.log(`✅ API Response: ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data);
+      }
+      return response;
+    },
     (error) => {
-      // Log errors or handle specific error codes globally
+      // Log errors in development
+      if (import.meta.env.DEV) {
+        console.error(`❌ API Error: ${error.config?.method?.toUpperCase()} ${error.config?.url}`, error);
+      }
+      
+      // Handle specific error cases
       if (error.response) {
         const status = error.response.status;
         
@@ -58,7 +77,7 @@ export const createApiClient = (baseConfig: AxiosRequestConfig = {}): AxiosInsta
         }
         
         // Enhance error message with server information if available
-        const errorMessage = error.response.data?.message || error.message;
+        const errorMessage = error.response.data?.message || error.response.data?.detail || error.message;
         error.message = `API Error (${status}): ${errorMessage}`;
       } else if (error.request) {
         // Request was made but no response received

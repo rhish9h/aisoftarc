@@ -5,10 +5,19 @@ import { ProjectTypeSelect } from './ProjectTypeSelect';
 import { ConstraintsInput } from './ConstraintsInput';
 import { AdvancedOptions } from './AdvancedOptions';
 import { HistoryPanel } from './HistoryPanel';
-import { ArchitectureRequest, ProjectType, ArchitectureHistory } from '../../types/architecture';
+import { ProjectType, ArchitectureHistory } from '../../types/architecture';
+
+// Define the form data structure that matches what useArchitectureGenerator expects
+interface FormData {
+  requirements: string;
+  projectType: ProjectType;
+  constraints: string;
+  includeSecurityConsiderations: boolean;
+  generateDeploymentDiagram: boolean;
+}
 
 interface ArchitectureFormProps {
-  onSubmit: (request: ArchitectureRequest) => void;
+  onSubmit: (formData: FormData) => void;
   isLoading: boolean;
   history: ArchitectureHistory[];
   onSelectFromHistory: (id: string) => void;
@@ -38,16 +47,16 @@ export const ArchitectureForm: React.FC<ArchitectureFormProps> = ({
       return;
     }
     
-    // Create request object
-    const request: ArchitectureRequest = {
+    // Create form data object
+    const formData: FormData = {
       requirements,
       projectType,
-      constraints: constraints.trim() || undefined,
+      constraints: constraints.trim() || '',
       includeSecurityConsiderations,
       generateDeploymentDiagram
     };
     
-    onSubmit(request);
+    onSubmit(formData);
   };
 
   return (
@@ -92,11 +101,14 @@ export const ArchitectureForm: React.FC<ArchitectureFormProps> = ({
         </Button>
       </form>
 
-      <HistoryPanel
-        items={history}
-        onSelectItem={onSelectFromHistory}
-        onClearHistory={onClearHistory}
-      />
+      {history.length > 0 && (
+        <HistoryPanel
+          history={history}
+          onSelect={onSelectFromHistory}
+          onClear={onClearHistory}
+          disabled={isLoading}
+        />
+      )}
     </div>
   );
 };
